@@ -8,19 +8,12 @@
 # @lc code=start
 class Solution:
     def maxSubArray(self, nums: List[int]) -> int:
-        def dfs(m):
-            if len(m) == 0:
-                return 0
-            if len(m) == 1:
-                return 1
-            if len(m) == 2:
-                return max(max(m), sum(m))
+        maxSum = curMax = nums[0]
+        for num in nums[1:]:
+            curMax = max(curMax + num, num)
+            maxSum = max(maxSum, curMax)
 
-            ms = len(m) // 2
-            a = dfs(m[:ms])
-            b = dfs(m[ms:])
-            c = max(a, b)
-            return max(a + b, c)
+        return maxSum
 
 
 # @lc code=end
