@@ -12,18 +12,14 @@ class Solution(object):
         :type n: int
         :rtype: List[List[int]]
         """
-        n *= n
-        matrix = [[n]]
-        i = n - 1
-        while i > 0:
-            row = []
-            for j in range(len(matrix[0])):
-                row.append(i)
-                i -= 1
-            matrix.append(row)
-            matrix = [row[::-1] for row in list(map(list, zip(*matrix)))]
-
-        matrix = [row[::-1] for row in list(map(list, zip(*matrix)))]
+        matrix = []
+        lo = n * n + 1
+        while lo > 1:
+            hi = lo
+            lo = lo - len(matrix)
+            row = [range(lo, hi)]
+            matrix = row + zip(*matrix[::-1])
+        print(matrix)
         return matrix
 
 
