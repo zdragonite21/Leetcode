@@ -3,6 +3,22 @@
 #
 # [57] Insert Interval
 #
+# -------------------------------- solution 1 -------------------------------- #
+# left = []
+# right = []
+
+# prev = newInterval
+# for l, r in intervals:
+#     a, b = prev
+#     if r < a:
+#         left.append([l, r])
+#     elif l > b:
+#         right.append([l, r])
+#     else:
+#         prev = [min(l, a), max(r, b)]
+
+# return left + [prev] + right
+import heapq
 
 
 # @lc code=start
@@ -10,27 +26,22 @@ class Solution:
     def insert(
         self, intervals: List[List[int]], newInterval: List[int]
     ) -> List[List[int]]:
-        sweep = []
+        h = []
         ans = []
-        for l, r in intervals:
-            sweep.append((l, 0))
-            sweep.append((r, 1))
-        sweep.append((newInterval[0], 0))
-        sweep.append((newInterval[1], 1))
-        sweep.sort()
 
-        print(sweep)
+        for l, r in intervals + [newInterval]:
+            heapq.heappush(h, [l, -1])
+            heapq.heappush(h, [r, 1])
 
-        l, r = -1, -1
-        for i, (x, y) in enumerate(sweep):
-            if y:
-                if i + 1 >= len(sweep) or not sweep[i + 1][1]:
-                    r = x
-                    ans.append((l, r))
-                    l, r = -1, -1
-            else:
-                if l == -1:
-                    l = x
+        close, start = 0, None
+        while h:
+            x, val = heapq.heappop(h)
+            close += val
+            if start is None:
+                start = x
+            if not close:
+                ans.append((start, x))
+                start = None
 
         return ans
         # @lc code=end
